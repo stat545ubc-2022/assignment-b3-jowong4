@@ -6,7 +6,7 @@
 date)](https://img.shields.io/github/v/release/stat545ubc-2022/assignment-b3-jowong4)
 <!-- badges: end -->
 
-For STAT545B assignment B-3, I have chosen option B and implemented my own shiny app. This shiny App contains breast cancer quantitative features found in the `cancer_sample` dataset in the package `datateachr`. The goal of this shiny App is to provide an interactive resource to explore the relations between different quantitative features by allowing users to select the interested features and visualize. Users can also look at the entire dataset and filter columns based on the results from their exploration.
+For STAT545B assignment B-3, I have chosen option B and implemented my own shiny app. This shiny App contains breast cancer quantitative features found in the `cancer_sample` dataset in the package `datateachr`. The goal of this shiny app is to provide an interactive resource to explore the relations between different quantitative features by allowing users to select the interested features and visualize. Users can also look at the entire dataset and filter columns based on the results from their exploration.
 
 
 

@@ -2,10 +2,11 @@ library(shiny)
 library(datateachr) # for cancer_sample dataset
 library(tidyverse)
 
-variables = colnames(cancer_sample)[3:32]
-colour_variables = colnames(cancer_sample)[2:32]
-can_samp_col <- colnames(cancer_sample)
-boxplot <- function(colname) {
+variables = colnames(cancer_sample)[3:32] # variable names to plot scatterplot
+colour_variables = colnames(cancer_sample)[2:32] #variables names to color scatterplot
+can_samp_col <- colnames(cancer_sample) # column names to filter table
+
+boxplot <- function(colname) { # boxplot code to avoid code duplication
   boxplot_obj <- 
     ggplot(cancer_sample, aes_string(x = factor(0), colname)) +
     geom_boxplot(na.rm = TRUE) + # supress warning message about removing NA entries
@@ -24,24 +25,24 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       h3("Graph Options"),
-      selectInput(
+      selectInput( # drop down menu to select x variable
         "x_variable",
         label = "select x variable",
         choices = variables
       ),
-      selectInput(
+      selectInput( # drop down menu to select y variable
         "y_variable",
         label = "select y variable",
         choices = variables
       ),
-      selectInput(
+      selectInput( # drop down menu to colour based on selected variable
         "colour",
         label = "colour",
         choices = colour_variables
       ),
       br(),
       h3("Table Options:"),
-      uiOutput("choose_columns"),
+      uiOutput("choose_columns"), # output checkbox ui
       br()
     ),
     mainPanel(
@@ -80,7 +81,7 @@ server <- function(input, output) {
     }
   )
   
-  output$choose_columns <- renderUI( #automatic checkbox genereation
+  output$choose_columns <- renderUI( # automatic checkbox genereation
     {
       checkboxGroupInput("columns", "Choose columns", choices = can_samp_col, selected = can_samp_col)
     }
@@ -89,7 +90,7 @@ server <- function(input, output) {
   output$tbl <- renderTable(
     {
       cancer_sample %>%
-        select(input$columns)
+        select(input$columns) # filter based on checkbox selection
     }
   )
 }

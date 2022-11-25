@@ -2,9 +2,8 @@ library(shiny)
 library(datateachr) # for cancer_sample dataset
 library(tidyverse)
 
-variables = colnames(cancer_sample)[3:32] # variable names to plot scatterplot
-colour_variables = colnames(cancer_sample)[2:32] #variables names to color scatterplot
-can_samp_col <- colnames(cancer_sample) # column names to filter table
+plot_variables = colnames(cancer_sample)[3:32] # variable names to plot scatterplot
+feature_variables = colnames(cancer_sample)[2:32] #variables names to color scatterplot
 
 boxplot <- function(colname) { # boxplot code to avoid code duplication
   boxplot_obj <- 
@@ -28,17 +27,17 @@ ui <- fluidPage(
       selectInput( # drop down menu to select x variable
         "x_variable",
         label = "select x variable",
-        choices = variables
+        choices = plot_variables
       ),
       selectInput( # drop down menu to select y variable
         "y_variable",
         label = "select y variable",
-        choices = variables
+        choices = plot_variables
       ),
       selectInput( # drop down menu to colour based on selected variable
         "colour",
         label = "colour",
-        choices = colour_variables
+        choices = feature_variables
       ),
       br(),
       h3("Table Options:"),
@@ -83,14 +82,14 @@ server <- function(input, output) {
   
   output$choose_columns <- renderUI( # automatic checkbox genereation
     {
-      checkboxGroupInput("columns", "Choose columns", choices = can_samp_col, selected = can_samp_col)
+      checkboxGroupInput("columns", "Choose columns", choices = feature_variables)
     }
   )
   
   output$tbl <- renderTable(
     {
       cancer_sample %>%
-        select(input$columns) # filter based on checkbox selection
+        select(c("ID", input$columns)) # filter based on checkbox selection
     }
   )
 }

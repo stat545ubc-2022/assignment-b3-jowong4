@@ -43,7 +43,7 @@ Cloning the repo:
 
 3.  Press Version Control then Git. Then paste the link into the url box.
 
-4.  Run `runApp()` to run a local version of the shinyApp
+4.  Run `runApp()`
 
 Using shiny utility:
 

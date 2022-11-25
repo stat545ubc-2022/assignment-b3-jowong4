@@ -5,6 +5,18 @@ library(tidyverse)
 variables = colnames(cancer_sample)[3:32]
 colour_variables = colnames(cancer_sample)[2:32]
 can_samp_col <- colnames(cancer_sample)
+boxplot <- function(colname) {
+  boxplot_obj <- 
+    ggplot(cancer_sample, aes_string(x = factor(0), colname)) +
+    geom_boxplot(na.rm = TRUE) + # supress warning message about removing NA entries
+    geom_jitter(na.rm = TRUE) + # supress warning message about removing NA entries
+    theme_bw() + 
+    theme(axis.title.y = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank()) +
+    xlab(str_to_title(str_replace(colname, "_", " ")))
+  return(boxplot_obj)
+}
 
 ui <- fluidPage(
   titlePanel("Diagnostic Breast Cancer Data App"),
@@ -52,33 +64,19 @@ server <- function(input, output) {
         geom_point(size = 2, aes(color = .data[[input$colour]])) + 
         theme_bw() +
         xlab(str_to_title(str_replace(input$x_variable, "_", " "))) + 
-        ylab(str_to_title(str_replace(input$y_variable, "_", " ")))
+        ylab(str_to_title(str_replace(input$y_variable, "_", " "))) 
     }
   )
   
   output$box_plot_x <- renderPlot(
     {
-    ggplot(cancer_sample, aes_string(x = factor(0), input$x_variable)) +
-      geom_boxplot(na.rm = TRUE) + # supress warning message about removing NA entries
-      geom_jitter(na.rm = TRUE) + # supress warning message about removing NA entries
-      theme_bw() + 
-      theme(axis.title.y = element_blank(),
-            axis.text.x = element_blank(),
-            axis.ticks.x = element_blank()) +
-        xlab(str_to_title(str_replace(input$x_variable, "_", " ")))
+      boxplot(input$x_variable)
     }
   )
   
   output$box_plot_y <- renderPlot(
     {
-    ggplot(cancer_sample, aes_string(x = factor(0), input$y_variable)) +
-        geom_boxplot(na.rm = TRUE) + # supress warning message about removing NA entries
-        geom_jitter(na.rm = TRUE) + # supress warning message about removing NA entries
-        theme_bw() + 
-        theme(axis.title.y = element_blank(),
-              axis.text.x = element_blank(),
-              axis.ticks.x = element_blank()) +
-        xlab(str_to_title(str_replace(input$y_variable, "_", " ")))
+      boxplot(input$y_variable)
     }
   )
   
@@ -90,8 +88,8 @@ server <- function(input, output) {
   
   output$tbl <- renderTable(
     {
-      filtered_cancer_sample <- cancer_sample[, input$columns, drop = FALSE]
-      filtered_cancer_sample
+      cancer_sample %>%
+        select(input$columns)
     }
   )
 }

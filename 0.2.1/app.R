@@ -19,6 +19,8 @@ boxplot <- function(df, colname) { # boxplot code to avoid code duplication
   return(boxplot_obj)
 }
 
+#default variables are radius_mean, texture_mean, and diagnosis.
+
 ui <- fluidPage(
   titlePanel("Diagnostic Breast Cancer Data App"),
   h4("Use this app to explore the quantative features of breast cancer nuclei"),
@@ -71,34 +73,36 @@ server <- function(input, output, session) {
   
   observeEvent(input$x_variable,
                {
-                 min_val <- floor(min(cancer_sample[, input$x_variable]))
-                 max_val <- ceiling(max(cancer_sample[, input$x_variable]))
+                 min_val <- floor(min(pull(cancer_sample, input$x_variable)))
+                 max_val <- ceiling(max(pull(cancer_sample, input$x_variable)))
+
                  updateSliderInput(session = session, inputId = "x_range",
                                                    min = min_val, max = max_val,
                                                    value = c(min_val, max_val)
                                                    )
+
                  updateCheckboxGroupInput(session = session, inputId = "columns",
                                           choices = feature_variables, selected = c(
                                             input$x_variable,
                                             input$y_variable,
-                                            input$colour
-                                          ))
+                                            input$colour))
                }
-               )
+  )
   
   observeEvent(input$y_variable,
                {
-                 min_val <- floor(min(cancer_sample[, input$y_variable]))
-                 max_val <- ceiling(max(cancer_sample[, input$y_variable]))
+                 min_val <- floor(min(pull(cancer_sample, input$x_variable)))
+                 max_val <- ceiling(max(pull(cancer_sample, input$x_variable)))
+
                  updateSliderInput(session = session, inputId = "y_range",
                                    min = min_val, max = max_val,
                                    value = c(min_val, max_val))
+
                  updateCheckboxGroupInput(session = session, inputId = "columns",
                                           choices = feature_variables, selected = c(
                                             input$x_variable,
                                             input$y_variable,
-                                            input$colour
-                                          ))
+                                            input$colour))
                }
   )
   
@@ -108,8 +112,7 @@ server <- function(input, output, session) {
                                           choices = feature_variables, selected = c(
                                             input$x_variable,
                                             input$y_variable,
-                                            input$colour
-                                          ))
+                                            input$colour))
                }
   )  
   
@@ -123,10 +126,15 @@ server <- function(input, output, session) {
   
   output$scatter_plot <- renderPlot(
     {
-      req(filtered_cancer_sample()$radius_mean, input$x_variable, input$x_range, input$y_variable, input$y_range) # ensure reactive table and variables are finalized before renddering
+      req(filtered_cancer_sample()$radius_mean,
+          input$x_variable,
+          input$x_range,
+          input$y_variable,
+          input$y_range) # ensure reactive table and variables are finalized before rendering
+      
       ggplot(filtered_cancer_sample(),
              aes_string(x = input$x_variable, y = input$y_variable)) + 
-        geom_point(size = 2, aes(color = .data[[input$colour]])) + 
+        geom_point(size = 2, aes_string(color = input$colour)) + 
         theme_bw() +
         xlab(str_to_title(str_replace_all(input$x_variable, "_", " "))) + 
         ylab(str_to_title(str_replace_all(input$y_variable, "_", " "))) 
@@ -135,14 +143,20 @@ server <- function(input, output, session) {
   
   output$box_plot_x <- renderPlot(
     {
-      req(filtered_cancer_sample()$radius_mean, input$x_variable, input$x_range)  # ensure reactive table and variables are finalized before renddering
+      req(filtered_cancer_sample()$radius_mean,
+          input$x_variable,
+          input$x_range)  # ensure reactive table and variables are finalized before rendering
+      
       boxplot(filtered_cancer_sample(), input$x_variable)
     }
   )
   
   output$box_plot_y <- renderPlot(
     {
-      req(filtered_cancer_sample()$radius_mean, input$y_variable, input$y_range)  # ensure reactive table and variables are finalized before renddering
+      req(filtered_cancer_sample()$radius_mean,
+          input$y_variable,
+          input$y_range)  # ensure reactive table and variables are finalized before rendering
+      
       boxplot(filtered_cancer_sample(), input$y_variable)
     }
   )
@@ -150,7 +164,12 @@ server <- function(input, output, session) {
   
   output$tbl <- DT::renderDataTable(server = FALSE,
     {
-      req(filtered_cancer_sample()$radius_mean, input$x_variable, input$x_range, input$y_variable, input$y_range)  # ensure reactive table and variables are finalized before renddering
+      req(filtered_cancer_sample()$radius_mean,
+          input$x_variable,
+          input$x_range,
+          input$y_variable,
+          input$y_range)  # ensure reactive table and variables are finalized before rendering
+
       filtered_cancer_sample() %>%
         select(c("ID", input$columns))
     },

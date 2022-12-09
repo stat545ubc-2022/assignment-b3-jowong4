@@ -18,7 +18,7 @@ As part of assignment B-3 (found in the directory `0.1.0`), I have implemented t
 
 The 0.1.0 shiny app is currently deployed on [shinyapps.io](https://jowong.shinyapps.io/breastCancerQuantFeatVer1).
 
-As part of assignment B-4, I have decided to upgrade the shiny app created in assignment B-3 (found in the directory `0.2.1`). Version 0.2.0 contains the following feautres:
+As part of assignment B-4, I have decided to upgrade the shiny app created in assignment B-3 (found in the directory `0.2.2`). Version 0.2.2 contains the following feautres:
 
 1. The table that is generated will have the intitial columns selected by the three variables: x, y and colour. Users can then add more columns to the list.
 2. The table will also be automatically regenerated with the three columns selected based on the three variables (x, y, and colour) whenever the user changes any of them.

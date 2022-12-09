@@ -26,7 +26,7 @@ As part of assignment B-4, I have decided to upgrade the shiny app created in as
 4. The table is now implemented using the `DT` package. This allows the user to view the table in pages of different number of columns. The tables can also be sorted using the columns.
 5. A selection of formats is availble for the user to download the table in based on the columns selected and filter using the x and y variable range sliders.
 
-The 0.2.0 shiny app is currently deployed on [shinyapps.io](https://jowong.shinyapps.io/breastCancerQuantFeatVer2). NOTE: there is a small delay to ensure all variables are properly set up before rendering plots and tables.
+The 0.2.2 shiny app is currently deployed on [shinyapps.io](https://jowong.shinyapps.io/breastCancerQuantFeatVer2). NOTE: there is a small delay to ensure all variables are properly set up before rendering plots and tables.
 
 ## How to run the shiny app locally?
 
